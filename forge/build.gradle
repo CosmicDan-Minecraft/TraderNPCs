@@ -34,7 +34,7 @@ dependencies {
     //modCompileOnly("com.github.samolego.Taterzens:taterzens-fabric:${project.taterzens}")
     //modImplementation("com.github.samolego.Taterzens:taterzens-forge:${project.taterzens}")
     modImplementation ("_lib:taterzens:${project.taterzens}-forge")
-    
+    modImplementation ("_lib:forgified-sgui-forge-1.18.2:1.0.2+1.18.2")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }

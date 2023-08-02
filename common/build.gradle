@@ -13,7 +13,7 @@ dependencies {
     // We need this for profession API
     //modCompileOnly("com.github.samolego.Taterzens:taterzens-fabric:${project.taterzens}")
     modCompileOnly ("_lib:taterzens:${project.taterzens}-forge")
-    modImplementation include("eu.pb4:sgui:1.0.2+1.18.2")
+    modCompileOnly ("_lib:forgified-sgui-forge-1.18.2:1.0.2+1.18.2")
 }
 
 publishing {
