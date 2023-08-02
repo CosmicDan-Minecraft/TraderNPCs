@@ -1,7 +1,9 @@
 package org.samo_lego.tradernpcs.gui;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,11 +48,11 @@ public class TradeEditGUI extends ListItemsGUI {
 
         final ItemStack pane = new ItemStack(Items.BLACK_STAINED_GLASS_PANE);
         pane.setTag(customData.copy());
-        pane.setHoverName(Component.literal(""));
+        pane.setHoverName(TextComponent.EMPTY);
 
         final ItemStack tradeFor = new ItemStack(Items.SPECTRAL_ARROW);
         tradeFor.setTag(customData.copy());
-        tradeFor.setHoverName(Component.literal("->"));
+        tradeFor.setHoverName(new TextComponent("->"));
 
         // GUI skeleton
         for (i = 9; i + 8 < this.getSize(); i += 9) {
@@ -185,5 +187,15 @@ public class TradeEditGUI extends ListItemsGUI {
     @Override
     public void setChanged() {
         this.profession.setDirty();
+    }
+
+    @Override
+    public int getContainerSize() {
+        return trades.size();
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
     }
 }

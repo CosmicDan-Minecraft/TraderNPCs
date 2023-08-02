@@ -1,15 +1,8 @@
-import com.modrinth.minotaur.TaskModrinthUpload
-
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 
-    id 'com.matthewprenger.cursegradle'
-    id "com.modrinth.minotaur"
-}
-loom {
-    forge {
-        mixinConfig "tradernpcs-common.mixins.json"
-    }
+    //id 'com.matthewprenger.cursegradle'
+    //id "com.modrinth.minotaur"
 }
 
 architectury {
@@ -17,7 +10,13 @@ architectury {
     forge()
 }
 
-def ENV = System.getenv();
+loom {
+    //accessWidenerPath = project(":${project.modid}-common").loom.accessWidenerPath
+
+    forge {
+        mixinConfig "tradernpcs-common.mixins.json"
+    }
+}
 
 configurations {
     common
@@ -28,12 +27,14 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:${rootProject.forge_version}"
 
     // Taterzens
     // We need this for profession API
     //modCompileOnly("com.github.samolego.Taterzens:taterzens-fabric:${project.taterzens}")
-    modImplementation("com.github.samolego.Taterzens:taterzens-forge:${project.taterzens}")
+    //modImplementation("com.github.samolego.Taterzens:taterzens-forge:${project.taterzens}")
+    modImplementation ("_lib:taterzens:${project.taterzens}-forge")
+    
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
@@ -50,19 +51,20 @@ processResources {
 
 shadowJar {
     exclude "fabric.mod.json"
+    exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    archiveClassifier = "dev-shadow"
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "forge"
+    archiveClassifier = "forge"
 }
 
 jar {
-    classifier "dev"
+    archiveClassifier = "forge-dev"
 }
 
 sourcesJar {
@@ -89,51 +91,4 @@ publishing {
     repositories {
         // Add repositories to publish to here.
     }
-}
-
-
-
-// from FAPI https://github.com/FabricMC/fabric/blob/1.16/build.gradle
-curseforge {
-    if (ENV.CURSEFORGE_API_KEY) {
-        apiKey = ENV.CURSEFORGE_API_KEY
-    }
-
-    project {
-        id = "550916"
-        changelog = ENV.CHANGELOG ?: "A changelog can be found at https://github.com/samolego/TraderNPCs/releases/tag/${version}"
-        releaseType = "release"
-        addGameVersion project.minecraft_version
-        addGameVersion "Forge"
-
-        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}-forge.jar")) {
-            displayName = "[${project.minecraft_version}] TraderNPCs ${version} [Forge]"
-        }
-
-        afterEvaluate {
-            uploadTask.dependsOn("remapJar")
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-    }
-}
-
-task modrinth(type: TaskModrinthUpload, dependsOn: remapJar) {
-    onlyIf {
-        ENV.MODRINTH_TOKEN
-    }
-
-    token = ENV.MODRINTH_TOKEN
-    projectId = "78ZQG4Et"
-    versionNumber = project.minecraft_version + "+" + version + "-forge"
-    changelog = ENV.CHANGELOG ?: "A changelog can be found at https://github.com/samolego/TraderNPCs/releases/tag/${version}"
-    versionName = "[${project.minecraft_version}] TraderNPCs ${version} [Forge]"
-    releaseType = "release"
-
-    uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}-forge.jar")
-
-    addGameVersion("${project.minecraft_version}")
-    addLoader('forge')
 }

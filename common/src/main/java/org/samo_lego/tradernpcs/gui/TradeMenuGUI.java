@@ -3,6 +3,7 @@ package org.samo_lego.tradernpcs.gui;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +22,7 @@ public class TradeMenuGUI extends SimpleGui {
 
         // Edit trades
         ItemStack edit = new ItemStack(Items.EMERALD);
-        edit.setHoverName(Component.literal("Edit trades"));
+        edit.setHoverName(new TextComponent("Edit trades"));
         GuiElement editTradesBtn = new GuiElement(edit, (index, type1, action) -> {
             this.close();
             new TradeEditGUI(profession, player, 0).open();
@@ -30,7 +31,7 @@ public class TradeMenuGUI extends SimpleGui {
 
         // Set stock
         ItemStack stock = new ItemStack(Items.CHEST);
-        stock.setHoverName(Component.literal("Set stock & collect earnings"));
+        stock.setHoverName(new TextComponent("Set stock & collect earnings"));
         GuiElement setStockBtn = new GuiElement(stock, (index, type1, action) -> {
             this.close();
             new SurvivalStockGUI(profession, player).open();
@@ -39,7 +40,7 @@ public class TradeMenuGUI extends SimpleGui {
 
         // View trades
         ItemStack view = new ItemStack(Items.ENDER_EYE);
-        view.setHoverName(Component.literal("View trades"));
+        view.setHoverName(new TextComponent("View trades"));
         GuiElement viewTradesBtn = new GuiElement(view, (index, type1, action) -> {
             this.close();
             new TradeGUI(profession, player).open();
